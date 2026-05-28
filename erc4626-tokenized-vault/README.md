@@ -80,3 +80,57 @@ forge test -vvv
 ## Deploy on Sepolia Testnet
 
 ### 1. Create a `.env` file
+PRIVATE_KEY=your_wallet_private_key
+RPC_URL=https://sepolia.infura.io/v3/your_infura_key
+
+### 2. Run deploy script
+```bash
+forge script script/Deploy.sol \
+  --rpc-url $RPC_URL \
+  --private-key $PRIVATE_KEY \
+  --broadcast
+```
+
+---
+
+## Project Structure
+erc4626-vault/
+├── src/
+│   └── MyVault.sol         ← main vault contract
+├── test/
+│   └── MyVault.t.sol       ← tests
+├── script/
+│   └── Deploy.sol          ← deployment script
+├── lib/
+│   └── openzeppelin-contracts/
+├── foundry.toml
+├── remappings.txt
+└── .gitignore
+
+---
+
+## Key Concepts to Learn
+
+| Concept | What to Read |
+|---|---|
+| ERC-4626 Standard | [ethereum.org/erc-4626](https://ethereum.org/developers/docs/standards/tokens/erc-4626/) |
+| OpenZeppelin Vault | [OZ ERC4626 Docs](https://docs.openzeppelin.com/contracts/5.x/api/token/erc20#ERC4626) |
+| Foundry Guide | [book.getfoundry.sh](https://book.getfoundry.sh/) |
+| Inflation Attack | [OZ Blog](https://blog.openzeppelin.com/a-novel-defense-against-erc4626-inflation-attacks) |
+
+---
+
+## Common Errors & Fixes
+
+| Error | Fix |
+|---|---|
+| `forge: command not found` | Install Foundry from [getfoundry.sh](https://getfoundry.sh) |
+| `Compiler version mismatch` | Run `foundryup` to update Foundry |
+| `Module not found` | Run `forge install OpenZeppelin/openzeppelin-contracts` |
+| `Insufficient funds` | Get Sepolia ETH from [sepoliafaucet.com](https://sepoliafaucet.com) |
+
+---
+
+## License
+
+MIT
