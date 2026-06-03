@@ -46,7 +46,7 @@ contract Vote {
     enum VotingStatus {NotStarted, InProgress, Ended}
     enum Gender {NotSpecified, Male, Female, Other}
 
-
+      IERC20 public gldToken;
 
 
     constructor() {
@@ -145,6 +145,7 @@ contract Vote {
 
 
     function castVote(uint _voterId, uint _candidateId) external isVotingOver(){
+        require(gldToken.balanceOf(msg.sender)>0,"Insufficent amount of token");
         require(block.timestamp >= startTime, "Voting has not started yet");
         require(voterDetails[_voterId].voteCandidateId==0,"You have already voted");
         require(voterDetails[_voterId].voterAddress==msg.sender,"You are not authourized");
