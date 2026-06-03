@@ -18,22 +18,46 @@ event TokensWithdrawn(address indexed owner, uint256 amount);
 event EtherWithdrawn(address indexed owner, uint256 amount);
 event CalculateTokenPrice(uint256 priceToPay);
 
+constructor(address _gldToken) Ownable(msg.sender){
+  gldToken = IERC20(_gldToken);
+}
 
 function adjustTokenPriceBasedOnDemand() public {
+  uint marketDemandRatio = buyerCount.mul(1e18).div(sellerCount);
+  uint smoothingFactor = 1e18;
+  uint adjustedRatio = marketDemandRatio.add(smoothingRatio).div(1e18);
 
-   
+  uint newTokenPrice = tokenPrice.mul(adjustedRatio).div(1e18);
+  if(newTokenPrice<minnimumPrice){
+    tokenPrice = minimumPrice;
+  }
+   tokenPrice = newTokenPrice;
 }
 
 function buyGLDToken(uint256 _amountOfToken) public payable {
-   
+   require(_amountOfToken > 0, "Amount of token should be greater than zero");
+   uint requireTokenPrice = calculateTokenPrice(_amountOfToken);
+   require(requireTokenPrice == msg.value,"Incorrect token price paid");
+   gldToken.safeTransfer(msg.sender,_amountOfToken,equireTokenPriced);
+   buyerCount += 1;
+   emit TokenBought(msg.sender,_amountOfToken,requiredTokenPrice);
 }
 
 function calculateTokenPrice(uint _amountOfToken) public {
-    
+    require(_amountOfToken>0,"Amount of Token > 0");
+    uint amountToPay = _amountOfToken.mul(tokenPrice).div(1e18);
+    console.log("amountToPay",amountToPay);
 }
 
 function sellGLDToken(uint256 amountOfToken) public {
-    requ
+    require(gldToken.balanceOf(msg.sender) >= amountOfToken,"Insufficient Balance");
+    uint priceToPay = calculateTokenPrice(amountOfToken);
+    approve(address(this).amountOfToken);
+    gldToken.safeTransfer(msg.sender,address(this),amountOfToken);
+    (bool success,) = msg.sender.call{value: priceToPay}("");
+    require(success, "Payment failed");
+    sellerCount += 1;
+   emit TokenSold(msg.sender, amountOfToken,priceToPay);  
 }
 
 function withdrawTokens(uint256 amount) public onlyOwner {
