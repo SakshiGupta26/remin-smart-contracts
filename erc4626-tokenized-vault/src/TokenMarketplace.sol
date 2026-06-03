@@ -61,10 +61,14 @@ function sellGLDToken(uint256 amountOfToken) public {
 }
 
 function withdrawTokens(uint256 amount) public onlyOwner {
-   
+   require(gldToken.balanceOf(address(this))e >= amount,"Insuffienet Balance on Contract");
+   gldToken.safeTransfer(msg.sender,owner,amount);
+   emit TokensWithdrawn(msg.sender, amount);
 }
 
 function withdrawEther(uint256 amount) public onlyOwner {
-    
+    require(address(this).balance>= _amount,"Invalid Ether amount");
+    (bool sucess,) payable(msg.sender).call{value:amount}("");
+    require(sucess,"Ether transfer failed");
 }
 }
