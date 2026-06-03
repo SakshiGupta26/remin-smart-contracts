@@ -1,3 +1,5 @@
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.26;
@@ -49,7 +51,8 @@ contract Vote {
       IERC20 public gldToken;
 
 
-    constructor() {
+    constructor(address _gldToken) {
+        gldToken = IERC20(_gldToken);
         electionCommission=msg.sender;
     }
 
