@@ -1,4 +1,9 @@
-enum Continent {
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+contract  Capstone{
+      enum Continent {
         None,
         NorthAmerica,
         Europe,
@@ -71,3 +76,5 @@ enum Continent {
         daysUnderMgmt = (block.timestamp - ledger[_id].timestamp)/totalsecondperday;
         return daysUnderMgmt;
     }
+
+} 
